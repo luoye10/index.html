@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文本排版</title>
+    <style>
+        p,h2{
+            margin: 0;
+            padding: 0;
+        }
+        .box{
+            margin: 50px auto;
+            writing-mode: vertical-rl;
+        }
+        .name{
+            padding-left: 30px;
+            padding-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #6af;
+            letter-spacing: 0.5em;
+        }
+        .text{
+            font-size: 20px;
+            line-height: 30px;
+            color: #0a9;
+            letter-spacing: 0.5em;
+        }
+        .flex{
+            margin: 50px 650px;
+        }
+        .title{
+            padding-left: 100px;
+            padding-bottom: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #0ff;
+            letter-spacing: 1em;
+        }
+        .content{
+            width: 300px;
+            color: #06c;
+            line-height: 30px;
+            letter-spacing: 0.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2 class="name">静夜思</h2>
+        <div class="text">
+            <p>床前明月光</p>
+            <p>疑是地上霜</p>
+            <p>举头望明月</p>
+            <p>低头思故乡</p>
+        </div>
+    </div>
+    <div class="flex">
+        <h2 class="title">望岳</h2>
+        <div class="content">
+            <p>岱宗夫如何？齐鲁青未了。</p>
+            <p>造化钟神秀，阴阳割昏晓。</p>
+            <p>荡胸生层云，决眦入归鸟。</p>
+            <p>会当凌绝顶，一览众山小。</p>
+        </div>    
+    </div>
+</body>
+</html>
