@@ -21,9 +21,29 @@
                 transform:translate(300px,0);
             }
         }
+        .ball{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #adf012;
+            margin-top: 10px;
+            animation: shift 2s linear 2 alternate both;
+        }
+        @keyframes shift{
+            0%{
+                transform: translate(0,0);
+            }
+            50%{
+                transform: translate(0,200px);
+            }
+            100%{
+                transform: translate(0,0);
+            }
+        }
     </style>
 </head>
 <body>
     <div class="box"></div>
+    <div class="ball"></div>
 </body>
 </html>
