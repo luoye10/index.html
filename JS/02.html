@@ -33,6 +33,16 @@
         }
         console.log('7的倍数的个数:' + c + '个')
         console.log('7的倍数的总和:' + s)
+
+        // 水仙花数
+        for(var i = 100; i < 1000; i++){
+            a = parseInt(i / 100)
+            b = parseInt((i - a * 100) / 10)
+            c = i % 10
+            if(a * a * a + b * b * b + c * c * c == i){
+                console.log(i)
+            }
+        }                    
     </script>
 </body>
 </html>
