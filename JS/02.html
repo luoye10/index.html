@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 假如投资年利率为 5%，从1000 块钱增长到 5000 块钱，需要多少年
+        var money = 1000, count = 0;
+        while(money <= 5000){
+            money *= 1.05;
+            count++;
+        }
+        console.log('一共需要' + count + '年')
+
+        // 输出 1-100 之间所有奇数的和
+        for(var i = 1, sum = 0; i < 100; i++){
+            if(i % 2 != 0){
+                sum += i
+            }
+        }
+        console.log(sum)
+
+        // 输出 1-100 之间所有 7 的倍数的个数及总和
+        for(var i = 1, s = 0, c = 0; i < 100; i++){
+            if(i % 7 == 0){
+                s += i;
+                c++
+            }
+        }
+        console.log('7的倍数的个数:' + c + '个')
+        console.log('7的倍数的总和:' + s)
+    </script>
+</body>
+</html>

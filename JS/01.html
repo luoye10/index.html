@@ -8,7 +8,7 @@
 </head>
 <body>
     <script>
-        const score = prompt("请输入小明的期末成绩 : ");
+        var score = prompt("请输入小明的期末成绩 : ");
         if(score > 100 || score < 0 || isNaN(score)){
             alert("请重新输入")
         }else if(score == 100){
@@ -21,7 +21,7 @@
             alert("一顿胖揍")
         }
         
-        const p = prompt('输入 :'),
+        var p = prompt('输入 :'),
         a = alert;
         switch(p){
             case '1':
