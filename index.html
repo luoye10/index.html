@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            margin: 0;
+            padding: 0;
+        } 
+        .btn{
+            text-align: center;
+            color: #fff;
+            background: rgba(10, 204, 238, 0.973);
+            border-radius: 10px;
+            border: 5px solid rgba(255, 255, 255, 0.82);
+            position: absolute;
+            left: 50%;
+            top: 10px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .box{
+            margin-top: 80px;
+        }
+        .content{
+            list-style: none;
+            height: 100px;
+            border: 1px dotted #faf;
+            border-radius: 5px;
+            position: relative;
+            background: rgba(170,170,170,.25);
+            margin: 20px 40px;
+        }
+        .site{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 20px;
+        }
+        .per{
+            position: absolute;
+            left: 100px;
+            top: 20px;
+        }
+        .name{
+            color: rgb(30, 211, 218);
+            margin-right: 5px;
+        }
+        .text{
+            color: rgba(0, 0, 0, 0.815);
+        }
+    </style>
+</head>
+<body>
+    <div class="btn">发送请求</div>
+    <div class="box"></div>
+    <script>
+        var btn = document.getElementsByClassName('btn')[0],
+        box = document.getElementsByClassName('box')[0]
+        btn.onclick = function(){
+            var xhr = new XMLHttpRequest()
+            var url = 'https://api.imjad.cn/cloudmusic/'
+            var params = {
+                type: 'comments',
+                id: 30352891,
+                limit: 20,
+                offset: 0
+            }
+            // 因为是 get 请求，参数需要拼接在 url 后面
+            var params1 = Object.keys(params).map(key => {
+                return key + '=' + params[key]
+            }).join('&')
+            url = url + '?' + params1
+            xhr.open('get',url)
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4){
+                    //console.log(xhr.response)
+                    // 字符串转换成对象
+                    var obj = JSON.parse(xhr.response)
+                    var arr = obj.comments
+                    console.time('for')
+                    var _box = document.createDocumentFragment()
+                    for(var i = 0; i < arr.length; i++){
+                        //console.log(arr[i])      
+                        var el = createTag('div')
+                        el.className = 'content'                   
+                        var ava = arr[i].user.avatarUrl,
+                        name = arr[i].user.nickname,
+                        content = arr[i].content
+                        el.innerHTML = '<img  class="site" src=' + ava + '>' + 
+                            '<div class="per"><span class="name">' + name + ' : </span>' +
+                            '<span class="text">' + content + '</span></div>'
+                        _box.appendChild(el)
+                    }  
+                    box.appendChild(_box)
+                    console.timeEnd('for')                                              
+                }
+            }
+            xhr.send(null)  
+        }
+        function createTag(name){
+            return document.createElement(name)
+        }
+        
+    </script>
+</body>
+</html>
