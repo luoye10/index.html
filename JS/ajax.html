@@ -6,20 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        button,div,ul,li{
+        div{
             margin: 0;
             padding: 0;
         } 
         .btn{
-            color: #f0f;
-            margin-bottom: 10px;
+            text-align: center;
+            color: #fff;
+            background: rgba(10, 204, 238, 0.973);
+            border-radius: 10px;
+            border: 5px solid rgba(255, 255, 255, 0.82);
+            position: absolute;
+            left: 50%;
+            top: 10px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .box{
+            margin-top: 80px;
         }
         .content{
+            list-style: none;
             height: 100px;
             border: 1px dotted #faf;
             border-radius: 5px;
             position: relative;
             background: rgba(170,170,170,.25);
+            margin: 20px 40px;
         }
         .site{
             width: 50px;
@@ -42,7 +55,7 @@
     </style>
 </head>
 <body>
-    <button class="btn">发送请求</button>
+    <div class="btn">发送请求</div>
     <div class="box"></div>
     <script>
         var btn = document.getElementsByClassName('btn')[0],
@@ -61,16 +74,15 @@
                 return key + '=' + params[key]
             }).join('&')
             url = url + '?' + params1
-            // console.log(params)
             xhr.open('get',url)
             xhr.onreadystatechange = function(){
                 if(xhr.readyState === 4){
-                    console.log(xhr.response)
+                    //console.log(xhr.response)
                     // 字符串转换成对象
                     var obj = JSON.parse(xhr.response)
-                    //console.log(obj)
                     var arr = obj.comments
-                    //console.log(arr)
+                    console.time('for')
+                    var _box = document.createDocumentFragment()
                     for(var i = 0; i < arr.length; i++){
                         //console.log(arr[i])      
                         var el = createTag('div')
@@ -81,8 +93,10 @@
                         el.innerHTML = '<img  class="site" src=' + ava + '>' + 
                             '<div class="per"><span class="name">' + name + ' : </span>' +
                             '<span class="text">' + content + '</span></div>'
-                        box.appendChild(el)
-                    }                                
+                        _box.appendChild(el)
+                    }  
+                    box.appendChild(_box)
+                    console.timeEnd('for')                                              
                 }
             }
             xhr.send(null)  
