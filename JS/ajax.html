@@ -81,7 +81,6 @@
                     // 字符串转换成对象
                     var obj = JSON.parse(xhr.response)
                     var arr = obj.comments
-                    console.time('for')
                     var _box = document.createDocumentFragment()
                     for(var i = 0; i < arr.length; i++){
                         //console.log(arr[i])      
@@ -95,8 +94,7 @@
                             '<span class="text">' + content + '</span></div>'
                         _box.appendChild(el)
                     }  
-                    box.appendChild(_box)
-                    console.timeEnd('for')                                              
+                    box.appendChild(_box)                                              
                 }
             }
             xhr.send(null)  
