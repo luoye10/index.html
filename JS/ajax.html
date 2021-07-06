@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        div{
+        div,ul,li,img{
             margin: 0;
             padding: 0;
         } 
@@ -52,11 +52,40 @@
         .text{
             color: rgba(157, 38, 187, 0.815);
         }
+        .page-list{
+            position: absolute;
+            left: 35%;
+        }
+        .page{
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            vertical-align: middle;
+            cursor: pointer;
+            line-height: 40px;
+            margin: 0 10px;
+            padding: 0 12px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
     <div class="btn">发送请求</div>
     <div class="box"></div>
+    <div class="page-box">
+        <ul class="page-list">
+            <li class="page"><</li>
+            <li class="page">1</li>
+            <li class="page">2</li>
+            <li class="page">3</li>
+            <li class="page">4</li>
+            <li class="page">5</li>
+            <li class="page">6</li>
+            <li class="page">></li>
+        </ul>
+    </div>
     <script>
         var btn = document.getElementsByClassName('btn')[0],
         box = document.getElementsByClassName('box')[0]
@@ -65,7 +94,7 @@
             var url = 'https://btea.site/music/comment/music'
             var params = {
                 id: 30352891,
-                limit: 20,
+                limit: 10,
                 offset: 0
             }
             // 因为是 get 请求，参数需要拼接在 url 后面
@@ -79,24 +108,28 @@
                     // 字符串转换成对象
                     var obj = JSON.parse(xhr.response)
                     var arr = obj.comments
-                    var _box = document.createDocumentFragment()
-                    for(var i = 0; i < arr.length; i++){      
-                        var el = createTag('div')
-                        el.className = 'content'                   
-                        var ava = arr[i].user.avatarUrl,
-                        name = arr[i].user.nickname,
-                        content = arr[i].content,
-                        time = formatDateTime(arr[i].time,"yyyy-MM-dd hh:mm:ss")
-                        el.innerHTML = '<img  class="site" src=' + ava + '>' + 
-                            '<div class="per"><span class="name">' + name + ' : </span>' +
-                            '<span class="text">' + content + '</span>' +
-                            '<div>' + time + '</div></div>'
-                        _box.appendChild(el)
-                    }  
-                    box.appendChild(_box)                                              
+                    rendAll(arr)                                              
                 }
             }
             xhr.send(null)  
+        }
+        function rendAll(arr){
+            var _box = document.createDocumentFragment()
+            for(var i = 0; i < arr.length; i++){  
+                // console.log(arr[i])    
+                var el = createTag('div')
+                el.className = 'content'                   
+                var ava = arr[i].user.avatarUrl,
+                name = arr[i].user.nickname,
+                content = arr[i].content,
+                time = formatDateTime(arr[i].time,"yyyy-MM-dd hh:mm:ss")
+                el.innerHTML = '<img  class="site" src=' + ava + '>' + 
+                    '<div class="per"><span class="name">' + name + ' : </span>' +
+                    '<span class="text">' + content + '</span>' +
+                    '<div>' + time + '</div></div>'
+                _box.appendChild(el)
+            }  
+            box.appendChild(_box)
         }
         function createTag(name){
             return document.createElement(name)
