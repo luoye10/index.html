@@ -62,9 +62,8 @@
         box = document.getElementsByClassName('box')[0]
         btn.onclick = function(){
             var xhr = new XMLHttpRequest()
-            var url = 'https://api.imjad.cn/cloudmusic/'
+            var url = 'https://btea.site/music/comment/music'
             var params = {
-                type: 'comments',
                 id: 30352891,
                 limit: 20,
                 offset: 0
@@ -77,21 +76,25 @@
             xhr.open('get',url)
             xhr.onreadystatechange = function(){
                 if(xhr.readyState === 4){
-                    //console.log(xhr.response)
+                    console.log(xhr.response)
                     // 字符串转换成对象
                     var obj = JSON.parse(xhr.response)
+                    console.log(obj)
                     var arr = obj.comments
+                    console.log(arr)
                     var _box = document.createDocumentFragment()
                     for(var i = 0; i < arr.length; i++){
-                        //console.log(arr[i])      
+                        console.log(arr[i])      
                         var el = createTag('div')
                         el.className = 'content'                   
                         var ava = arr[i].user.avatarUrl,
                         name = arr[i].user.nickname,
-                        content = arr[i].content
+                        content = arr[i].content,
+                        time = formatDateTime(arr[i].time,"yyyy-MM-dd hh:mm:ss")
                         el.innerHTML = '<img  class="site" src=' + ava + '>' + 
                             '<div class="per"><span class="name">' + name + ' : </span>' +
-                            '<span class="text">' + content + '</span></div>'
+                            '<span class="text">' + content + '</span>' +
+                            '<div>' + time + '</div></div>'
                         _box.appendChild(el)
                     }  
                     box.appendChild(_box)                                              
@@ -102,7 +105,21 @@
         function createTag(name){
             return document.createElement(name)
         }
-        
+        function formatDateTime(time,format){
+            var time,y,M,d,h,m,s
+            time = new Date(time);
+            y = time.getFullYear() + '-';
+            M = addZero(time.getMonth() + 1) + '-';
+            d = addZero(time.getDate())  + ' ';
+            h = addZero(time.getHours()) + ':';
+            m = addZero(time.getMinutes()) + ':';
+            s = addZero(time.getSeconds());
+            format = y + M + d + h + m + s
+            return format
+        }
+        function addZero(value){
+            return value < 10 ? '0' + value : value
+        }
     </script>
 </body>
 </html>
