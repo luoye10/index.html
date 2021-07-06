@@ -76,15 +76,11 @@
             xhr.open('get',url)
             xhr.onreadystatechange = function(){
                 if(xhr.readyState === 4){
-                    console.log(xhr.response)
                     // 字符串转换成对象
                     var obj = JSON.parse(xhr.response)
-                    console.log(obj)
                     var arr = obj.comments
-                    console.log(arr)
                     var _box = document.createDocumentFragment()
-                    for(var i = 0; i < arr.length; i++){
-                        console.log(arr[i])      
+                    for(var i = 0; i < arr.length; i++){      
                         var el = createTag('div')
                         el.className = 'content'                   
                         var ava = arr[i].user.avatarUrl,
