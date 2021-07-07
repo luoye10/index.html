@@ -10,22 +10,34 @@
             margin: 0;
             padding: 0;
         } 
+        .search{
+            position: absolute;
+            left: 40%;
+            top: 10px;
+        }
+        .words{
+            width: 200px;
+            height: 40px;
+            border: 1px solid rgba(157, 38, 187, 0.815);
+            border-radius: 5px;
+            margin-right: 10px;
+            box-sizing: border-box;
+        }
         .btn{
+            display: inline-block;
+            width: 80px;
+            height: 40px;
+            line-height: 40px;
             text-align: center;
             color: #fff;
             background: rgba(255, 192, 203, 0.884);
-            border-radius: 10px;
-            border: 5px solid rgba(255, 255, 255, 0.82);
-            position: absolute;
-            left: 50%;
-            top: 10px;
+            border-radius: 5px;
             cursor: pointer;
-            padding: 5px;
         }
-        .box{
+        .box,.song-list{
             margin-top: 80px;
         }
-        .content{
+        .content,.song{
             list-style: none;
             height: 100px;
             border: 1px dotted rgb(170, 238, 255);
@@ -33,14 +45,15 @@
             position: relative;
             background: rgba(170,170,170,.25);
             margin: 20px 40px;
+            cursor: pointer;
         }
-        .site{
+        .site,.img{
             width: 50px;
             height: 50px;
             border-radius: 50%;
             margin: 20px;
         }
-        .per{
+        .per,.names{
             position: absolute;
             left: 100px;
             top: 20px;
@@ -49,7 +62,7 @@
             color: rgb(218, 121, 30);
             margin-right: 5px;
         }
-        .text{
+        .text,.singer{
             color: rgba(157, 38, 187, 0.815);
         }
         .page-list{
@@ -72,30 +85,84 @@
     </style>
 </head>
 <body>
-    <div class="btn">发送请求</div>
+    <div class="search">
+        <input type="text" class="words" value="初恋情人">
+        <div class="btn">查询</div>
+    </div>
+    <audio src="" class="audio"></audio>
+    <div class="song-list"></div>
     <div class="box"></div>
     <div class="page-box">
-        <ul class="page-list">
-            <li class="page"><</li>
-            <li class="page">1</li>
-            <li class="page">2</li>
-            <li class="page">3</li>
-            <li class="page">4</li>
-            <li class="page">5</li>
-            <li class="page">6</li>
-            <li class="page">></li>
-        </ul>
+        <ul class="page-list"></ul>
     </div>
     <script>
         var btn = document.getElementsByClassName('btn')[0],
-        box = document.getElementsByClassName('box')[0]
-        btn.onclick = function(){
+        box = document.getElementsByClassName('box')[0],
+        pages = document.getElementsByClassName('page-list')[0],
+        songList = document.getElementsByClassName('song-list')[0];
+        var songId, maxPage, limit = 10;
+        btn.addEventListener('click',function(){
+            var word = document.getElementsByClassName('words')[0].value;
+            var xhr = new XMLHttpRequest();
+            var url = 'https://btea.site/music//search?keywords=' + word;
+            xhr.open('get',url);
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4){
+                    var obj = JSON.parse(xhr.response);
+                    console.log(obj)
+                    var songs = obj.result.songs;
+                    var frag = document.createDocumentFragment();
+                    songs.forEach(song => {
+                        var el = createTag('div');
+                        el.className = 'song';
+                        el.setAttribute('id',song.id)
+                        var img = song.album.artist.img1v1Url,
+                        name = song.name,
+                        singer = song.artists[0].name
+                        el.innerHTML = '<img class="img" src=' + img + '>' + 
+                            '<div class="names"><div class="name">' + name + '</div>' + 
+                            '<div class="singer">' + singer + '</div></div>'
+                        frag.appendChild(el)
+                        el.addEventListener('click',function(){
+                            var id = el.getAttribute('id')
+                            var xhr = new XMLHttpRequest()
+                            var url = 'https://btea.site/music/song/url?id=' + id
+                            xhr.open('get',url)
+                            xhr.onreadystatechange = function(){
+                                if(xhr.readyState === 4){
+                                    var obj = JSON.parse(xhr.response).data
+                                    console.log(obj)
+                                    var url = obj[0].url
+                                    var audio = document.getElementsByClassName('audio')[0]
+                                    songId = id
+                                    audio.src = url
+                                    audio.play()
+                                    songList.innerHTML = ''
+                                    startRequest()
+                                }
+                            }
+                            xhr.send(null)
+                        })
+                    })
+                    songList.appendChild(frag)
+                }
+            }
+            xhr.send(null);
+        })
+        function clickSong(){
+            
+        }
+        // btn.onclick = function(){
+        //     startRequest()
+        // }
+        function startRequest(){
+            var page = page || 1
             var xhr = new XMLHttpRequest()
             var url = 'https://btea.site/music/comment/music'
             var params = {
-                id: 30352891,
-                limit: 10,
-                offset: 0
+                id: songId,
+                limit: limit,
+                offset: (page - 1) * limit
             }
             // 因为是 get 请求，参数需要拼接在 url 后面
             var params1 = Object.keys(params).map(key => {
@@ -106,6 +173,7 @@
             xhr.onreadystatechange = function(){
                 if(xhr.readyState === 4){
                     // 字符串转换成对象
+
                     var obj = JSON.parse(xhr.response)
                     var arr = obj.comments
                     rendAll(arr)                                              
@@ -116,7 +184,7 @@
         function rendAll(arr){
             var _box = document.createDocumentFragment()
             for(var i = 0; i < arr.length; i++){  
-                // console.log(arr[i])    
+                console.log(arr[i])    
                 var el = createTag('div')
                 el.className = 'content'                   
                 var ava = arr[i].user.avatarUrl,
