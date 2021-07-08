@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片切换</title>
+    <style>
+        .box{
+            width: 400px;
+            height: 300px;
+            background: #aff;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        img{
+            width: 360px;
+            height: 230px;
+        }
+        .prev,.next{
+            display: inline-block;
+            border: 1px solid rgb(142, 23, 197);
+            border-radius: 5px;
+            color: #999;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <p class="text"></p>
+        <img src="./img/1.jpg">
+        <div class="prev">上一张</div>
+        <div class="next">下一张</div>
+    </div>
+    <script>
+        var prev = document.getElementsByClassName('prev')[0],
+        next = document.getElementsByClassName('next')[0],
+        img = document.getElementsByTagName('img')[0];    
+        var index = 0;
+        var imgArr = ["./img/1.jpg","./img/2.jpg","./img/3.jpg","./img/4.jpg","./img/5.jpg"]
+        var text = document.getElementsByClassName('text')[0];
+        text.innerHTML = '这是第 ' + (index + 1) + ' 张, ' + '一共 ' + imgArr.length + ' 张';
+        prev.onclick = function(){
+            index--;
+            if(index < 0){
+                index = imgArr.length - 1;
+            }
+            img.src = imgArr[index];
+            text.innerHTML = '这是第 ' + (index + 1) + ' 张, ' + '一共 ' + imgArr.length + ' 张'
+        }
+        next.onclick = function(){
+            index++;
+            if(index > imgArr.length - 1){
+                index = 0;
+            }
+            img.src = imgArr[index];
+            text.innerHTML = '这是第 ' + (index + 1) + ' 张, ' + '一共 ' + imgArr.length + ' 张'
+        }
+    </script>
+</body>
+</html>

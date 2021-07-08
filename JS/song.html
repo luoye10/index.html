@@ -156,13 +156,12 @@
         //     startRequest()
         // }
         function startRequest(){
-            var page = page || 1
             var xhr = new XMLHttpRequest()
             var url = 'https://btea.site/music/comment/music'
             var params = {
                 id: songId,
                 limit: limit,
-                offset: (page - 1) * limit
+                offset: 0
             }
             // 因为是 get 请求，参数需要拼接在 url 后面
             var params1 = Object.keys(params).map(key => {
