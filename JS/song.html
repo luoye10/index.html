@@ -67,20 +67,25 @@
         }
         .page-list{
             position: absolute;
-            left: 35%;
+            left: 30%;
+            margin-bottom: 10px;
         }
         .page{
             display: inline-block;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border: 1px solid #000;
             border-radius: 5px;
-            vertical-align: middle;
+            text-align: center;
             cursor: pointer;
             line-height: 40px;
-            margin: 0 10px;
-            padding: 0 12px;
+            margin: 10px;
+            padding: 5px;
             box-sizing: border-box;
+        }
+        .page.active{
+            background: rgb(13, 182, 173);
+            color: rgba(255, 255, 255, 0.904);
         }
     </style>
 </head>
@@ -100,7 +105,7 @@
         box = document.getElementsByClassName('box')[0],
         pages = document.getElementsByClassName('page-list')[0],
         songList = document.getElementsByClassName('song-list')[0];
-        var songId, maxPage, limit = 10;
+        var songId, total, limit = 10, currentPage = 1;
         btn.addEventListener('click',function(){
             var word = document.getElementsByClassName('words')[0].value;
             var xhr = new XMLHttpRequest();
@@ -149,19 +154,14 @@
             }
             xhr.send(null);
         })
-        function clickSong(){
-            
-        }
-        // btn.onclick = function(){
-        //     startRequest()
-        // }
-        function startRequest(){
+        function startRequest(page){
+            page = page || 1;
             var xhr = new XMLHttpRequest()
             var url = 'https://btea.site/music/comment/music'
             var params = {
                 id: songId,
                 limit: limit,
-                offset: 0
+                offset: (page - 1) * limit
             }
             // 因为是 get 请求，参数需要拼接在 url 后面
             var params1 = Object.keys(params).map(key => {
@@ -173,12 +173,47 @@
                 if(xhr.readyState === 4){
                     // 字符串转换成对象
 
-                    var obj = JSON.parse(xhr.response)
-                    var arr = obj.comments
-                    rendAll(arr)                                              
+                    var obj = JSON.parse(xhr.response);
+                    console.log(obj);
+                    total = obj.total;
+                    var arr = obj.comments;
+                    rendAll(arr);
+                    allTotal() ;                                            
                 }
             }
             xhr.send(null)  
+        }
+        function allTotal(){
+            var num = Math.ceil(total / limit);
+            var allPage = [];
+            if(num <= 10){
+                for(var i = 0; i < num; i++){
+                    allPage.push(i + 1)
+                }
+            }else{
+                allPage.push(1,2,3,4,5,6,7,8,'...',num)
+            }
+            renderPage(allPage)
+        }
+        function renderPage(pageList){
+            var frag = document.createDocumentFragment();
+            pageList.forEach(page => {
+                var li = createTag('li');
+                li.addEventListener('click',function(){
+                    var active = document.getElementsByClassName('active')[0];
+                    active.className = 'page';
+                    li.className = 'page active';
+                    startRequest();
+                })
+                li.className = 'page';
+                if(page === currentPage){
+                    li.className = 'page active';
+                }
+                li.innerHTML = page;
+                frag.appendChild(li);
+            })
+            pages.innerHTML = '';
+            pages.appendChild(frag);
         }
         function rendAll(arr){
             var _box = document.createDocumentFragment()
