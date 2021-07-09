@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全选</title>
+</head>
+<body>
+    <form method="post" action="">
+        你爱好的运动是？ <input type="checkbox" id="checkedAllBox">全选/全不选
+
+        <br />
+        <input type="checkbox" name="items" value="足球">足球
+        <input type="checkbox" name="items" value="篮球">篮球
+        <input type="checkbox" name="items" value="排球">排球
+        <input type="checkbox" name="items" value="网球">网球
+        <br />
+        <input type="button" id="checkedAllBtn" value="全 选">
+        <input type="button" id="checkedNoBtn" value="全不选">
+        <input type="button" id="checkedRevBtn" value="反 选">
+        <input type="button" id="sendBtn" value="提 交">
+    </form>
+    <script>
+        var checkedAllBtn = document.getElementById('checkedAllBtn'),
+        checkedNoBtn = document.getElementById('checkedNoBtn'),
+        checkedRevBtn = document.getElementById('checkedRevBtn'),
+        sendBtn = document.getElementById('sendBtn'),
+        checkedAllBox = document.getElementById('checkedAllBox'),
+        items = document.getElementsByName('items');
+        function myClick(idStr,fun){
+            var name = document.getElementById(idStr);
+            name.onclick = fun;
+        }
+        // 设置四个多选框为选中状态
+        myClick('checkedAllBtn',function(){
+            for(var i = 0; i < items.length; i++){
+                // 通过多选框的 checked 属性可以获取或设置多选框的选中状态
+                items[i].checked = true;
+            }
+            checkedAllBox.checked = true;
+        });
+        // 设置四个多选框为没选中状态
+        myClick('checkedNoBtn',function(){
+            for(var i = 0; i < items.length; i++){
+                items[i].checked = false;
+            }
+            checkedAllBox.checked = false;
+        });
+        // 点击之后，选中的变成没选中的
+        myClick('checkedRevBtn',function(){
+            checkedAllBox.checked = true;
+            for(var i = 0; i < items.length; i++){
+                // 判断多选框状态
+                // if(items[i].checked){
+                //     items[i].checked = false;
+                // }else{
+                //     items[i].checked = true;
+                // }
+                items[i].checked = !items[i].checked;
+                // 判断四个多选框是否全选，有一个没选中就不是全选
+                if(!items[i].checked){
+                    // 将 checkedAllBox 设置为没选中状态
+                    checkedAllBox.checked = false;
+                }
+            }
+        })
+        // 点击之后，将所有选中多选框的 value 值输出
+        myClick('sendBtn',function(){
+            for(var i = 0; i < items.length; i++){
+                // 判断多选框是否选中
+                if(items[i].checked){
+                    console.log(items[i].value);
+                }
+            }
+        })
+        myClick('checkedAllBox',function(){
+            for(var i = 0; i < items.length; i++){
+                // 在事件的响应函数中，响应函数是给谁绑定的，this 就是谁
+                items[i].checked = this.checked;
+            }
+        })
+        for(var i = 0; i < items.length; i++){
+            items[i].addEventListener('click',function(){
+                // 将 checkedAllBox 设置为选中状态
+                checkedAllBox.checked = true;
+                for(var j = 0; j < items.length; j++){
+                    // 判断四个多选框是否全选，有一个没选中就不是全选
+                    if(!items[j].checked){
+                        // 将 checkedAllBox 设置为没选中状态
+                        checkedAllBox.checked = false;
+                        break;
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>
