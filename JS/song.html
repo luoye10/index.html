@@ -83,8 +83,8 @@
             padding: 5px;
             box-sizing: border-box;
         }
-        .page.active{
-            background: rgb(13, 182, 173);
+        .active{
+            background: rgba(23, 161, 216, 0.87);
             color: rgba(255, 255, 255, 0.904);
         }
     </style>
@@ -100,6 +100,7 @@
     <div class="page-box">
         <ul class="page-list"></ul>
     </div>
+    <script src="./page.js"></script>
     <script>
         var btn = document.getElementsByClassName('btn')[0],
         box = document.getElementsByClassName('box')[0],
@@ -178,7 +179,12 @@
                     total = obj.total;
                     var arr = obj.comments;
                     rendAll(arr);
-                    allTotal() ;                                            
+                    if(page === 1){
+                        // allTotal();
+                        generatePage(total,limit,pages,function(n){
+                            startRequest(n);
+                        })
+                    }                                            
                 }
             }
             xhr.send(null)  
@@ -199,12 +205,7 @@
             var frag = document.createDocumentFragment();
             pageList.forEach(page => {
                 var li = createTag('li');
-                li.addEventListener('click',function(){
-                    var active = document.getElementsByClassName('active')[0];
-                    active.className = 'page';
-                    li.className = 'page active';
-                    startRequest();
-                })
+                li.addEventListener('click',pageSelec)
                 li.className = 'page';
                 if(page === currentPage){
                     li.className = 'page active';
@@ -214,6 +215,15 @@
             })
             pages.innerHTML = '';
             pages.appendChild(frag);
+        }
+        function pageSelec(e){
+            var el = e.target;
+            var active = document.getElementsByClassName('active')[0];
+            active.className = 'page';
+            el.className = 'page active';
+            var n = el.innerHTML;
+            n = Number(n);
+            startRequest(n);
         }
         function rendAll(arr){
             var _box = document.createDocumentFragment()
@@ -230,8 +240,9 @@
                     '<span class="text">' + content + '</span>' +
                     '<div>' + time + '</div></div>'
                 _box.appendChild(el)
-            }  
-            box.appendChild(_box)
+            } 
+            box.innerHTML = ''; 
+            box.appendChild(_box);
         }
         function createTag(name){
             return document.createElement(name)
