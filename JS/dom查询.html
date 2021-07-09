@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,body,ul,li,p{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            position: relative;
+        }
+        li{
+            list-style: none;
+            float: left;
+            background: rgb(22, 196, 89);
+            color: black;
+            border: 1px solid black;
+            height: 20px;
+            font-size: 14px;
+            text-align: center;
+            line-height: 20px;
+            margin: 10px;
+            padding: 5px 3px;
+        }
+        ul:after{
+            clear: both;
+            content: '';
+            display: block;
+        }
+        .inner:nth-child(1){
+            width: 300px;
+            height: 260px;
+            border: 1px solid black;
+            margin: 20px 200px;
+            padding-left: 10px;
+            padding-top: 20px;
+        }
+        .inner:nth-child(2){
+            width: 300px;
+            height: 70px;
+            border: 1px solid black;
+            margin: 10px 200px;
+            padding: 10px 0 5px 10px;
+        }
+        #btnList{
+            width: 300px;
+            height: 400px;
+            position: absolute;
+            top: 0;
+            left: 550px;
+        }
+        #btnList button{
+            width: 100%;
+            height: 25px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id='total'>
+        <div class="inner">
+            <p>
+                你喜欢哪个城市
+            </p>
+            <ul id="city">
+                <li id="bj">北京</li>
+                <li>上海</li>
+                <li>东京</li>
+                <li>首尔</li>
+            </ul>
+            <br>
+            <p>
+                你喜欢哪款单机游戏？
+            </p>
+            <ul id="game">
+                <li id="rl">红警</li>
+                <li>实况</li>
+                <li>极品飞车</li>
+                <li>魔兽</li>
+            </ul>
+            <br />
+            <p>
+                你手机的操作系统是？
+            </p>
+            <ul id='phone'><li>IOS</li><li id="android">Android</li><li>Windows Phone</li></ul>
+        </div>
+        <div class="inner">
+            gender:
+            <input type="radio" name='gender' value='male'/>
+            Male
+            <input type="radio" name='gender' value='female'/>
+            female
+            <br>
+            <br>
+            name:
+            <input type="text" name='name' id='username' value='hello'/>
+        </div>
+    </div>
+    <div id="btnList">
+        <div> <button id='btn01'>查找#bj节点</button></div>  
+        <div> <button id='btn02'>查找所有li节点</button></div>  
+        <div> <button id='btn03'>查找name=gender的所有节点</button></div>  
+        <div> <button id='btn04'>查找#city下所有的li节点</button></div>  
+        <div> <button id='btn05'>返回#city下所有的子节点</button></div>  
+        <div> <button id='btn06'>返回#phone的第一个子节点</button></div>  
+        <div> <button id='btn07'>返回#bj的父节点</button></div>  
+        <div> <button id='btn08'>返回#android的前一个兄弟节点</button></div>  
+        <div> <button id='btn09'>读取#username的value属性值</button></div>  
+        <div> <button id='btn10'>设置#username的value属性值</button></div>  
+        <div> <button id='btn11'>返回#bj的文本值</button></div>  
+    </div>
+    <script>
+         function myClick(idStr,fun){
+            var name = document.getElementById(idStr);
+            name.onclick = fun;
+        } 
+
+        // 查找 #bj 节点
+        myClick('btn01',function(){
+            var bj = document.getElementById('bj');
+            console.log(bj.innerHTML)
+        })
+
+        // 查找所有li节点
+        myClick('btn02',function(){
+            var lis = document.getElementsByTagName('li');
+            for(var i = 0; i < lis.length; i++){
+                console.log(lis[i].innerHTML)
+            }
+        })
+
+        // 查找name=gender的所有节点
+        myClick('btn03',function(){
+            var inputs = document.getElementsByName('gender');
+            for(var i = 0; i < inputs.length; i++){
+                console.log(inputs[i].value)
+            }
+        })
+
+        // 查找#city下所有的li节点
+        myClick('btn04',function(){
+            var city = document.getElementById('city');
+            var lis = city.getElementsByTagName('li');
+            for(var i = 0; i < lis.length; i++){
+                console.log(lis[i].innerHTML)
+            }
+        })
+
+        // 返回#city下所有的子节点
+        myClick('btn05',function(){
+            var city = document.getElementById('city')
+            var allChild = city.childNodes;
+            var cns = city.children;
+            for(var i = 0; i < cns.length; i++){
+                console.log(cns[i].innerHTML);
+            }
+        })
+
+        // 返回#phone的第一个子节点
+        myClick('btn06',function(){
+            var phone = document.getElementById('phone');
+            var f = phone.firstChild;
+            console.log(f.innerHTML);
+        })
+
+        // 返回#bj的父节点
+        myClick('btn07',function(){
+            var bj = document.getElementById('bj');
+            var pn = bj.parentNode;
+            console.log(pn.innerHTML)
+            console.log(pn.innerText);
+        })
+
+        // 返回#android的前一个兄弟节点
+        myClick('btn08',function(){
+            var and = document.getElementById('android');
+            var prev = and.previousSibling;
+            console.log(prev.innerHTML);
+        })
+
+        // 读取#username的value属性值
+        myClick('btn09',function(){
+            var un = document.getElementById('username');
+            console.log(un.value);
+        })
+
+        // 设置#username的value属性值
+        myClick('btn10',function(){
+            var un = document.getElementById('username');
+            un.value = '你好';
+        })
+
+        // 返回#bj的文本值
+        myClick('btn11',function(){
+            var bj = document.getElementById('bj');
+            console.log(bj.innerHTML);
+            console.log(bj.firstChild.nodeValue);
+        })
+    </script>
+</body>
+</html>
