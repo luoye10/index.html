@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table{
+            margin: 30px auto;
+            border-collapse: collapse;
+        }
+        th,td{
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+        } 
+        div{
+           width: 300px;
+           height: 200px;
+           margin: 20px auto;
+           border: 1px solid black;
+           padding-top: 20px;
+           padding-left: 10px;
+        }
+        h1{
+            font-size: 18px; 
+            margin-bottom: 30px;  
+        }
+        h2{
+            font-size: 14px;
+            color: rgba(0, 0, 0, 0.644);
+        }
+        .screen{
+            width: 240px;
+        }
+        #add{
+            margin-left: 120px;
+        }
+    </style>
+</head>
+<body>
+    <table id='employee' cellpadding='10' border='1' align='center'>
+        <tr>
+            <th>名字</th>
+            <th>邮箱</th>
+            <th>工资</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td>Tom</td>
+            <td>Tom@tom.com</td>
+            <td>10000</td>
+            <td><a href="deleteEmp?id=01">Delete</a></td>
+        </tr>
+        <tr>
+            <td>Jack</td>
+            <td>Jack@jack.com</td>
+            <td>8000</td>
+            <td><a href="deleteEmp?id=02">Delete</a></td>
+        </tr>
+        <tr>
+            <td>Bob</td>
+            <td>Bob@bob.com</td>
+            <td>12000</td>
+            <td><a href="deleteEmp?id=03">Delete</a></td>
+        </tr>
+    </table>
+    <div>
+        <h1>添加新员工</h1>
+        <h2>名字：<input type="text" class='screen' id='name'></h2>    
+        <h2>邮箱：<input type="text" class='screen' id='email'></h2>   
+        <h2>工资：<input type="text" class='screen' id='salary'></h2> 
+        <button id='add'>提交</button>   
+    </div>
+    <script>
+        var allA = document.getElementsByTagName('a'),
+        add = document.getElementById('add');
+        function delA(){
+            var tagName = this.parentNode.parentNode;
+            // 需要删除的员工的名字
+            var name = tagName.children[0].innerHTML;
+            /**
+             *      confirm()弹出一个带有确认和取消按钮的提示框
+             *       需要一个字符串作为你参数，该字符串会作为提示文字显示出来
+             *       点击确认则返回 true，点击取消则返回 false
+             * 
+             * */ 
+            var flag = confirm('确定要删除' + name + '吗?');
+            if(flag){
+                tagName.parentNode.removeChild(tagName);
+            }
+            
+            // 在响应函数额最后 return false 可以取消默认行为
+            return false;
+        }
+        for(var i = 0; i <　allA.length; i++){
+            allA[i].onclick = delA;
+        }
+        add.addEventListener('click',function(){
+            var name = document.getElementById('name').value,
+            email = document.getElementById('email').value,
+            salary = document.getElementById('salary').value;
+            var tr = document.createElement('tr');
+            tr.innerHTML =  '<td>' + name + '</td>' +
+                            '<td>' + email + '</td>' + 
+                            '<td>' + salary + '</td>' +
+                            '<td><a href="javascript:;">Delete</a></td>'
+            var employee = document.getElementById('employee'),
+            tbody = document.getElementsByTagName('tbody')[0];
+            tbody.appendChild(tr);
+            var a = tr.getElementsByTagName('a')[0];
+            a.addEventListener('click',delA);
+        })
+    </script>
+</body>
+</html>
