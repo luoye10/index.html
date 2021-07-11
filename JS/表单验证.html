@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div,span,input{
+            margin: 0;
+            padding: 0;
+        }
+        #box{
+            width: 300px;
+            height: 300px;
+            border: 1px solid black;
+            margin: 100px auto;
+            text-align: center;
+            background: lightgray;
+        }
+        #username{
+            width: 200px;
+            height: 30px;
+            margin-top: 40px;
+            font-size: 18px;
+        }
+        #text{
+            display: block;
+            width: 200px;
+            height: 30px;
+            color: grey;
+            margin: 5px 50px;
+            padding: 5px;
+            font-size: 14px;
+        }
+        #password{
+            width: 200px;
+            height: 30px;
+            margin-top: 20px;
+        }
+        #test{
+            margin: 20px 40px;
+        }
+        #test .testCode{
+            width: 60px;
+            height: 30px;
+            line-height: 30px;
+            background: grey;
+            color: black;
+            float: left;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <input type="text" placeholder="用户名" id="username">
+        <span id="text">6~18个字符，可使用数字、字母、下划线，需以字母开头</span>
+        <input type="text" placeholder="密码" id="password">
+        <div id="test">
+            <div class="testCode">弱</div>
+            <div class="testCode">中</div>
+            <div class="testCode">强</div>
+        </div>  
+    </div>
+    <script>
+        var username = document.getElementById('username'),
+        text = document.getElementById('text'),
+        password = document.getElementById('password'),
+        test = document.getElementById('test'),
+        testCode = document.getElementsByClassName('testCode');
+        username.onblur = function(){
+            var value = username.value;
+            if(value.length < 6 || value.lenght > 18){
+                text.innerHTML = '长度应为6-18个字符';
+                text.style.color = 'red';
+            }else if(!/[A-z]/.test(value[0])){
+                text.innerHTML = '邮件地址必须以英文字母开头';
+                text.style.color = 'red';
+            }else if(/\W/.test(value)){
+                text.innerHTML = '邮件地址必须由数字、字母、下划线组成';
+                text.style.color = 'red';
+            }else{
+                text.innerHTML = '☑该用户名可注册';
+                text.style.color = 'green';
+            }
+        }
+        password.onkeyup = function(){
+            var value = this.value;
+            for(var i = 0; i < testCode.length; i++){
+                testCode[i].style.background = 'grey';
+            }
+            if(value.length >= 6){
+                if(/^[0-9]+$/.test(value) || /^[a-z]+$/.test(value) ||　/^[A-Z]+$/.test(value)){
+                    testCode[0].style.background = 'orange';
+                }else if(/[0-9]/.test(value) && /[a-z]/.test(value) &&　/[A-Z]/.test(value)){
+                    testCode[2].style.background = 'orange';
+                }else{
+                    testCode[1].style.background = 'orange';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
