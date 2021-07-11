@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box{
+            width: 200px;
+            height: 200px;
+            border: 1px dashed grey;
+            color: aqua;
+            font-size: 18px;
+            text-align: center;
+            line-height: 200px;
+            margin: 30px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">文本内容</div>
+    <script>
+        var box = document.getElementsByClassName('box')[0];
+        var speed = 5, count = 0;
+        setInterval(function(){
+            box.style.color = color();
+            var fs = parseInt(getStyle(box,'fontSize'));
+            box.style.fontSize = (fs + speed) + 'px';
+            count++;
+            if(count % 5 === 0){
+                speed *= -1;
+            }
+        },1000)
+        function color(){
+            var c = '#', str = '0123456789abcdef';
+            for(var i = 0; i < 3; i++){
+                c += str[r(0,15)];
+            }
+            return c
+        }
+        function r(min,max){
+            return Math.floor(Math.random() * (max - min) + min);
+        }
+        function getStyle(obj,name){
+            if(window.getComputedStyle){
+                return getComputedStyle(obj,null)[name];
+            }else{
+                return obj.currentStyle[name];
+            }
+        }
+    </script>
+</body>
+</html>
