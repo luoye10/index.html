@@ -20,7 +20,7 @@ HTML文档中的HTML标签
 ### `getElementsByTagName()`    
 通过标签名获取`一组`元素节点对象
 
-### `getElementByName()`    
+### `getElementsByName()`    
 通过`name`属性获取`一组`元素节点对象
 
 ### `getElementsByClassName()`  
@@ -71,7 +71,9 @@ HTML文档中的HTML标签
 可以删除一个子节点，语法:`父节点.removeChild(子节点)`
 
 ### `cloneNode()`       
-复制节点，语法:`node.cloneNode()`  `node.cloneNode(true)`,克隆节点本身和子节点， 返回克隆出来的新节点
+复制节点，语法:`node.cloneNode()`  
+
+`node.cloneNode(true)`,克隆节点本身和子节点， 返回克隆出来的新节点
                            
 ### 属性节点
 元素的属性
