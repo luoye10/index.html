@@ -6,26 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        div{
+        div,ul,li,img{
             margin: 0;
             padding: 0;
         } 
+        .search{
+            position: absolute;
+            left: 40%;
+            top: 10px;
+        }
+        .words{
+            width: 200px;
+            height: 40px;
+            border: 1px solid rgba(157, 38, 187, 0.815);
+            border-radius: 5px;
+            margin-right: 10px;
+            box-sizing: border-box;
+        }
         .btn{
+            display: inline-block;
+            width: 80px;
+            height: 40px;
+            line-height: 40px;
             text-align: center;
             color: #fff;
             background: rgba(255, 192, 203, 0.884);
-            border-radius: 10px;
-            border: 5px solid rgba(255, 255, 255, 0.82);
-            position: absolute;
-            left: 50%;
-            top: 10px;
+            border-radius: 5px;
             cursor: pointer;
-            padding: 5px;
         }
-        .box{
+        .box,.song-list{
             margin-top: 80px;
         }
-        .content{
+        .content,.song{
             list-style: none;
             height: 100px;
             border: 1px dotted rgb(170, 238, 255);
@@ -33,14 +45,15 @@
             position: relative;
             background: rgba(170,170,170,.25);
             margin: 20px 40px;
+            cursor: pointer;
         }
-        .site{
+        .site,.img{
             width: 50px;
             height: 50px;
             border-radius: 50%;
             margin: 20px;
         }
-        .per{
+        .per,.names{
             position: absolute;
             left: 100px;
             top: 20px;
@@ -49,25 +62,107 @@
             color: rgb(218, 121, 30);
             margin-right: 5px;
         }
-        .text{
+        .text,.singer{
             color: rgba(157, 38, 187, 0.815);
+        }
+        .page-list{
+            position: absolute;
+            left: 30%;
+            margin-bottom: 10px;
+        }
+        .page{
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            line-height: 40px;
+            margin: 10px;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .active{
+            background: rgba(23, 161, 216, 0.87);
+            color: rgba(255, 255, 255, 0.904);
         }
     </style>
 </head>
 <body>
-    <div class="btn">发送请求</div>
+    <div class="search">
+        <input type="text" class="words" value="初恋情人">
+        <div class="btn">查询</div>
+    </div>
+    <audio src="" class="audio"></audio>
+    <div class="song-list"></div>
     <div class="box"></div>
+    <div class="page-box">
+        <ul class="page-list"></ul>
+    </div>
+    <script src="./Js/page.js"></script>
     <script>
         var btn = document.getElementsByClassName('btn')[0],
-        box = document.getElementsByClassName('box')[0]
-        btn.onclick = function(){
+        box = document.getElementsByClassName('box')[0],
+        pages = document.getElementsByClassName('page-list')[0],
+        songList = document.getElementsByClassName('song-list')[0];
+        var songId, total, limit = 10, currentPage = 1;
+        btn.addEventListener('click',function(){
+            var word = document.getElementsByClassName('words')[0].value;
+            var xhr = new XMLHttpRequest();
+            var url = 'https://btea.site/music//search?keywords=' + word;
+            xhr.open('get',url);
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4){
+                    var obj = JSON.parse(xhr.response);
+                    console.log(obj)
+                    var songs = obj.result.songs;
+                    var frag = document.createDocumentFragment();
+                    songs.forEach(song => {
+                        var el = createTag('div');
+                        el.className = 'song';
+                        el.setAttribute('id',song.id)
+                        var img = song.album.artist.img1v1Url,
+                        name = song.name,
+                        singer = song.artists[0].name
+                        el.innerHTML = '<img class="img" src=' + img + '>' + 
+                            '<div class="names"><div class="name">' + name + '</div>' + 
+                            '<div class="singer">' + singer + '</div></div>'
+                        frag.appendChild(el)
+                        el.addEventListener('click',function(){
+                            var id = el.getAttribute('id')
+                            var xhr = new XMLHttpRequest()
+                            var url = 'https://btea.site/music/song/url?id=' + id
+                            xhr.open('get',url)
+                            xhr.onreadystatechange = function(){
+                                if(xhr.readyState === 4){
+                                    var obj = JSON.parse(xhr.response).data
+                                    console.log(obj)
+                                    var url = obj[0].url
+                                    var audio = document.getElementsByClassName('audio')[0]
+                                    songId = id
+                                    audio.src = url
+                                    audio.play()
+                                    songList.innerHTML = ''
+                                    startRequest()
+                                }
+                            }
+                            xhr.send(null)
+                        })
+                    })
+                    songList.appendChild(frag)
+                }
+            }
+            xhr.send(null);
+        })
+        function startRequest(page){
+            page = page || 1;
             var xhr = new XMLHttpRequest()
-            var url = 'https://api.imjad.cn/cloudmusic/'
+            var url = 'https://btea.site/music/comment/music'
             var params = {
-                type: 'comments',
-                id: 30352891,
-                limit: 20,
-                offset: 0
+                id: songId,
+                limit: limit,
+                offset: (page - 1) * limit
             }
             // 因为是 get 请求，参数需要拼接在 url 后面
             var params1 = Object.keys(params).map(key => {
@@ -77,32 +172,96 @@
             xhr.open('get',url)
             xhr.onreadystatechange = function(){
                 if(xhr.readyState === 4){
-                    //console.log(xhr.response)
                     // 字符串转换成对象
-                    var obj = JSON.parse(xhr.response)
-                    var arr = obj.comments
-                    var _box = document.createDocumentFragment()
-                    for(var i = 0; i < arr.length; i++){
-                        //console.log(arr[i])      
-                        var el = createTag('div')
-                        el.className = 'content'                   
-                        var ava = arr[i].user.avatarUrl,
-                        name = arr[i].user.nickname,
-                        content = arr[i].content
-                        el.innerHTML = '<img  class="site" src=' + ava + '>' + 
-                            '<div class="per"><span class="name">' + name + ' : </span>' +
-                            '<span class="text">' + content + '</span></div>'
-                        _box.appendChild(el)
-                    }  
-                    box.appendChild(_box)                                              
+
+                    var obj = JSON.parse(xhr.response);
+                    console.log(obj);
+                    total = obj.total;
+                    var arr = obj.comments;
+                    rendAll(arr);
+                    if(page === 1){
+                        // allTotal();
+                        generatePage(total,limit,pages,function(n){
+                            startRequest(n);
+                        })
+                    }                                            
                 }
             }
             xhr.send(null)  
         }
+        function allTotal(){
+            var num = Math.ceil(total / limit);
+            var allPage = [];
+            if(num <= 10){
+                for(var i = 0; i < num; i++){
+                    allPage.push(i + 1)
+                }
+            }else{
+                allPage.push(1,2,3,4,5,6,7,8,'...',num)
+            }
+            renderPage(allPage)
+        }
+        function renderPage(pageList){
+            var frag = document.createDocumentFragment();
+            pageList.forEach(page => {
+                var li = createTag('li');
+                li.addEventListener('click',pageSelec)
+                li.className = 'page';
+                if(page === currentPage){
+                    li.className = 'page active';
+                }
+                li.innerHTML = page;
+                frag.appendChild(li);
+            })
+            pages.innerHTML = '';
+            pages.appendChild(frag);
+        }
+        function pageSelec(e){
+            var el = e.target;
+            var active = document.getElementsByClassName('active')[0];
+            active.className = 'page';
+            el.className = 'page active';
+            var n = el.innerHTML;
+            n = Number(n);
+            startRequest(n);
+        }
+        function rendAll(arr){
+            var _box = document.createDocumentFragment()
+            for(var i = 0; i < arr.length; i++){  
+                console.log(arr[i])    
+                var el = createTag('div')
+                el.className = 'content'                   
+                var ava = arr[i].user.avatarUrl,
+                name = arr[i].user.nickname,
+                content = arr[i].content,
+                time = formatDateTime(arr[i].time,"yyyy-MM-dd hh:mm:ss")
+                el.innerHTML = '<img  class="site" src=' + ava + '>' + 
+                    '<div class="per"><span class="name">' + name + ' : </span>' +
+                    '<span class="text">' + content + '</span>' +
+                    '<div>' + time + '</div></div>'
+                _box.appendChild(el)
+            } 
+            box.innerHTML = ''; 
+            box.appendChild(_box);
+        }
         function createTag(name){
             return document.createElement(name)
         }
-        
+        function formatDateTime(time,format){
+            var time,y,M,d,h,m,s
+            time = new Date(time);
+            y = time.getFullYear() + '-';
+            M = addZero(time.getMonth() + 1) + '-';
+            d = addZero(time.getDate())  + ' ';
+            h = addZero(time.getHours()) + ':';
+            m = addZero(time.getMinutes()) + ':';
+            s = addZero(time.getSeconds());
+            format = y + M + d + h + m + s
+            return format
+        }
+        function addZero(value){
+            return value < 10 ? '0' + value : value
+        }
     </script>
 </body>
 </html>
