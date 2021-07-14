@@ -7,6 +7,8 @@
     let styles = {
         height: '40px',
         'line-height': '40px',
+        'text-align': 'center',
+        padding: '0 10px',
         cursor: 'pointer',
         color: '#000',
         display: 'inline-block',
@@ -53,7 +55,9 @@
                     // 最右边的省略号
                     li.className = 'next';
                 }
-            } else {
+            } else if(page === 1){
+                li.className = 'page active';
+            } else{
                 li.className = 'page';
             }
                 
@@ -88,6 +92,7 @@
             prevPage();
             var num = pages[5];
             var children = parentNode.children;
+            children[0].className = 'page';
             children[5].className = 'page active';
             children[5].style.color = '#6cf';
             callbackFn(num);
@@ -97,6 +102,7 @@
             nextPage();
             var num = pages[5];
             var children = parentNode.children;
+            children[0].className = 'page';
             children[5].className = 'page active';
             children[5].style.color = '#6cf';
             callbackFn(num);
