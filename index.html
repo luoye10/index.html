@@ -189,42 +189,6 @@
             }
             xhr.send(null)  
         }
-        function allTotal(){
-            var num = Math.ceil(total / limit);
-            var allPage = [];
-            if(num <= 10){
-                for(var i = 0; i < num; i++){
-                    allPage.push(i + 1)
-                }
-            }else{
-                allPage.push(1,2,3,4,5,6,7,8,'...',num)
-            }
-            renderPage(allPage)
-        }
-        function renderPage(pageList){
-            var frag = document.createDocumentFragment();
-            pageList.forEach(page => {
-                var li = createTag('li');
-                li.addEventListener('click',pageSelec)
-                li.className = 'page';
-                if(page === currentPage){
-                    li.className = 'page active';
-                }
-                li.innerHTML = page;
-                frag.appendChild(li);
-            })
-            pages.innerHTML = '';
-            pages.appendChild(frag);
-        }
-        function pageSelec(e){
-            var el = e.target;
-            var active = document.getElementsByClassName('active')[0];
-            active.className = 'page';
-            el.className = 'page active';
-            var n = el.innerHTML;
-            n = Number(n);
-            startRequest(n);
-        }
         function rendAll(arr){
             var _box = document.createDocumentFragment()
             for(var i = 0; i < arr.length; i++){  
@@ -234,7 +198,7 @@
                 var ava = arr[i].user.avatarUrl,
                 name = arr[i].user.nickname,
                 content = arr[i].content,
-                time = formatDateTime(arr[i].time,"yyyy-MM-dd hh:mm:ss")
+                time = formatTime(arr[i].time,"yyyy-MM-dd hh:mm:ss")
                 el.innerHTML = '<img  class="site" src=' + ava + '>' + 
                     '<div class="per"><span class="name">' + name + ' : </span>' +
                     '<span class="text">' + content + '</span>' +
@@ -247,7 +211,7 @@
         function createTag(name){
             return document.createElement(name)
         }
-        function formatDateTime(time,format){
+        function formatTime(time,format){
             var time,y,M,d,h,m,s
             time = new Date(time);
             y = time.getFullYear() + '-';
