@@ -212,13 +212,12 @@
             return document.createElement(name)
         }
         function formatTime(time,format){
-            var time,y,M,d,h,m,s
             time = new Date(time);
-            y = time.getFullYear();
-            M = time.getMonth() + 1;
-            d = time.getDate();
-            h = time.getHours();
-            m = time.getMinutes();
+            let y = time.getFullYear(),
+            M = time.getMonth() + 1,
+            d = time.getDate(),
+            h = time.getHours(),
+            m = time.getMinutes(),
             s = time.getSeconds();
             format = format.replace(/y+/, y);
             format = format.replace(/M+/, ('0' + M).slice(-2));
