@@ -106,7 +106,7 @@
         box = document.getElementsByClassName('box')[0],
         pages = document.getElementsByClassName('page-list')[0],
         songList = document.getElementsByClassName('song-list')[0];
-        var songId, total, limit = 10, currentPage = 1;
+        var songId, total, limit = 20, currentPage = 1;
         btn.addEventListener('click',function(){
             var word = document.getElementsByClassName('words')[0].value;
             var xhr = new XMLHttpRequest();
@@ -198,12 +198,12 @@
                 var ava = arr[i].user.avatarUrl,
                 name = arr[i].user.nickname,
                 content = arr[i].content,
-                time = formatTime(arr[i].time,"yyyy-MM-dd hh:mm:ss")
+                time = formatTime(arr[i].time,"yyyy-MM-dd hh:mm:ss");
                 el.innerHTML = '<img  class="site" src=' + ava + '>' + 
                     '<div class="per"><span class="name">' + name + ' : </span>' +
                     '<span class="text">' + content + '</span>' +
                     '<div>' + time + '</div></div>'
-                _box.appendChild(el)
+                _box.appendChild(el);
             } 
             box.innerHTML = ''; 
             box.appendChild(_box);
@@ -214,18 +214,21 @@
         function formatTime(time,format){
             var time,y,M,d,h,m,s
             time = new Date(time);
-            y = time.getFullYear() + '-';
-            M = addZero(time.getMonth() + 1) + '-';
-            d = addZero(time.getDate())  + ' ';
-            h = addZero(time.getHours()) + ':';
-            m = addZero(time.getMinutes()) + ':';
-            s = addZero(time.getSeconds());
-            format = y + M + d + h + m + s
-            return format
+            y = time.getFullYear();
+            M = time.getMonth() + 1;
+            d = time.getDate();
+            h = time.getHours();
+            m = time.getMinutes();
+            s = time.getSeconds();
+            format = format.replace(/y+/, y);
+            format = format.replace(/M+/, ('0' + M).slice(-2));
+            format = format.replace(/d+/, ('0' + d).slice(-2));
+            format = format.replace(/h+/, ('0' + h).slice(-2));
+            format = format.replace(/m+/, ('0' + m).slice(-2));
+            format = format.replace(/s+/, ('0' + s).slice(-2));
+            return format;
         }
-        function addZero(value){
-            return value < 10 ? '0' + value : value
-        }
+        
     </script>
 </body>
 </html>
