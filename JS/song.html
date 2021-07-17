@@ -35,6 +35,9 @@
         .box{
             margin: 50px auto;
         }
+        .song-list{
+            margin-top: -300px;
+        }
         .content,.song{
             list-style: none;
             height: 100px;
@@ -92,6 +95,19 @@
             overflow-y: auto;
             margin: 0 auto;
         }
+        .lyrics::-webkit-scrollbar{
+            width: 10px;
+        }
+        .lyrics::-webkit-scrollbar-track{
+            width: 10px;
+            border-radius: 5px;
+            background: #adf;
+        }
+        .lyrics::-webkit-scrollbar-thumb{
+            height: 10px;
+            border-radius: 5px;
+            background: rgba(26, 197, 140, 0.877);
+        }
         .lyric{ 
             margin-bottom: 5px;
             height: 20px;
@@ -115,15 +131,16 @@
             width: 50px;
             height: 30px;
             border-radius: 5px;
-            background: rgb(170, 235, 255);
-            line-height: 30px;
+            background: #6fa;
+            margin: 10px auto;
             text-align: center;
+            line-height: 30px;
             cursor: pointer;
         }
         .nowTime{
             display: inline-block;
             margin: 0 10px;
-            color: tomato;
+            color: rgb(34, 181, 192);
         }
         .progress{
             display: inline-block;
@@ -131,16 +148,18 @@
             height: 20px;
             border-radius: 20px;
             border: 1px solid #adf;
-            margin-top: 30px;
+            margin-top: 30px 5px;
         }
         .now{
             width: 0;
             height: 20px;
+            cursor: pointer;
+            border-radius: 20px;
         }
         .end{
             display: inline-block;
             margin-left: 10px;
-            color: pink;
+            color: rgb(44, 101, 139);
         }
     </style>
 </head>
@@ -152,7 +171,11 @@
     <div class="box">
         <div class="lyrics"></div>
         <div class="comment"></div>
+        <div class="page-box">
+            <ul class="page-list"></ul>
+        </div>
     </div>
+    <div class="song-list"></div>
     <div class="icons">
         <div class="play">播放</div>
         <div class="pause">暂停</div>
@@ -162,26 +185,22 @@
         </div>
         <div class="end"></div>
     </div>
-    <audio src="" class="audio"></audio>
-    <div class="song-list"></div>
-    <div class="page-box">
-        <ul class="page-list"></ul>
-    </div>
-    <script src="./JS/page.js"></script>
+    <audio src="" class="audio"></audio> 
+    <script src="./page.js"></script>
     <script>
-        var btn = document.getElementsByClassName('btn')[0],
-        box = document.getElementsByClassName('box')[0],
-        pages = document.getElementsByClassName('page-list')[0],
-        songList = document.getElementsByClassName('song-list')[0],
-        lyrics = document.getElementsByClassName('lyrics')[0],
-        comment = document.getElementsByClassName('comment')[0],
-        play = document.getElementsByClassName('play')[0],
-        pause = document.getElementsByClassName('pause')[0],
-        nowTime = document.getElementsByClassName('nowTime')[0],
-        progress = document.getElementsByClassName('progress')[0],
-        now = document.getElementsByClassName('now')[0],
-        end = document.getElementsByClassName('end')[0];
-        var songId, total, limit = 20, currentPage = 1;
+        var btn = getClass('btn'),
+        box = getClass('box'),
+        pages = getClass('page-list'),
+        songList = getClass('song-list'),
+        lyrics = getClass('lyrics'),
+        comment = getClass('comment'),
+        play = getClass('play'),
+        pause = getClass('pause'),
+        nowTime = getClass('nowTime'),
+        progress = getClass('progress'),
+        now = getClass('now'),
+        end = getClass('end');
+        var songId, total, timeArr, limit = 20, currentPage = 1;
         btn.addEventListener('click',function(){
             var word = document.getElementsByClassName('words')[0].value;
             var xhr = new XMLHttpRequest();
@@ -216,44 +235,46 @@
                                     console.log(obj);
                                     var url = obj[0].url;
                                     var audio = document.getElementsByClassName('audio')[0];
-                                   
                                     songId = id;
                                     audio.src = url;
-                                    // audio.play();
-                                    
                                     let minutes = Math.floor(playTime / 60000),
                                     seconds = Math.floor(playTime / 1000) - minutes * 60;
-                                    playTime = '0' + minutes + ' : ' + seconds;
-                                    // console.log(playTime)
+                                    playTime = '0' + minutes + ':' + seconds;
                                     end.innerHTML = playTime;
                                     wordRequest();
-                                    // console.log(audio);
-                                    // console.log(audio.duration); 
                                     songList.innerHTML = '';
                                     startRequest();
                                     var timer,currentTime;
+                                    nowTime.innerHTML = '00 : 00';
                                     play.addEventListener('click',function(){
-                                        clearInterval(timer);
                                         audio.play();
+                                        clearInterval(timer);
                                         timer = setInterval(function(){
                                             currentTime = Math.floor(audio.currentTime);
                                             if(currentTime < 10){
-                                                currentTime = '00 : 0' + currentTime;
+                                                currentTime = '00:0' + currentTime;
                                             }else if(currentTime < 60){
-                                                currentTime = '00 : ' + currentTime;
+                                                currentTime = '00:' + currentTime;
                                             }else {
                                                 let m = Math.floor(currentTime / 60),
-                                                s = currentTime - m * 60;
-                                                currentTime = '0' + m + ' : ' + s;
+                                                s = currentTime - m * 60 < 10 ? '0' + (currentTime - m * 60) : currentTime - m * 60;
+                                                currentTime = '0' + m + ':' + s;
                                             }
                                             nowTime.innerHTML = currentTime;
+                                            everyTime(currentTime);
+                                            let m = Number(currentTime.slice(1,2)),
+                                            s = Number(currentTime.slice(-2)),
+                                            length = m * 60 + s;
+                                            let M = Number(playTime.slice(1,2)),
+                                            S = Number(playTime.slice(-2)),
+                                            totalLength = M * 60 + S;
+                                            now.style.width = length / totalLength * progress.offsetWidth + 'px';
+                                            now.style.background = 'greenyellow';
                                         },1000)
                                     })
-                                    // console.log(currentTime);
-                                    // progress.addEventListener('click',function(){
-                                    //     now.style.width = currentTime / playTime * this.offsetWidth + 'px';
-                                    //     now.style.background = 'red';
-                                    // })
+                                    progress.addEventListener('click',function(){
+                                       
+                                    })
                                     pause.addEventListener('click',function(){
                                         audio.pause();
                                         clearInterval(timer);
@@ -275,23 +296,32 @@
             var url = 'https://btea.site/music/lyric?id=' + id;
             xhr.open('get',url);
             xhr.onreadystatechange = function(){
-                if(xhr.readyState === 4){
-                    
+                if(xhr.readyState === 4){   
                     var obj = JSON.parse(xhr.response);
                     var lyric = obj.lrc.lyric;
+                    timeArr = lyric.match(/\d{2}:\d{2}/g);
                     lyric = lyric.split(/\[\d{2}:\d{2}.\d{2,}\]/g);
-                    //console.log(lyric)
                     lyric.forEach(item => {
-                        // console.log(item);
                         var el = createTag('div');
                         el.className = 'lyric';
                         el.innerHTML = item;
-                        frag.appendChild(el);
+                        frag.appendChild(el);  
                     })
                     lyrics.appendChild(frag);
                 }
             }
             xhr.send(null);
+        }
+        function everyTime(currentTime){
+            for(var i = 0; i < timeArr.length; i++){
+                if(currentTime >= timeArr[i] && currentTime < timeArr[i + 1]){
+                    var lyric = document.getElementsByClassName('lyric');
+                    lyric[i].style.color = '';
+                    lyric[i + 1].style.color = 'red';
+                    lyric[i + 1].parentNode.scrollTop = i * 20;
+                    break;
+                }
+            }
         }
         function rendAll(arr){
             var frag = document.createDocumentFragment()
@@ -346,9 +376,11 @@
             }
             xhr.send(null)  
         }
-       
+        function getClass(str){
+            return document.getElementsByClassName(str)[0];
+        }
         function createTag(name){
-            return document.createElement(name)
+            return document.createElement(name);
         }
         function formatTime(time,format){
             time = new Date(time);
