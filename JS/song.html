@@ -10,6 +10,10 @@
             margin: 0;
             padding: 0;
         } 
+        body{
+            background: url(./img/草地.jpg);
+            background-attachment: fixed;
+        }
         .search{
             text-align: center;
         }
@@ -123,18 +127,9 @@
             border-top: 1px solid grey;
             text-align: center;
             line-height: 80px;
-            background: rgb(255, 255, 255, 1);
+            background: rgb(255, 255, 255, .5);
             box-sizing: border-box;
         }
-        /* .play,.pause{
-            display: inline-block;
-            width: 50px;
-            height: 30px;
-            border-radius: 5px;
-            background: #6fa;
-            cursor: pointer;
-            vertical-align: middle;
-        } */
         .button{
             display: inline-block;
             width: 30px;
@@ -276,7 +271,7 @@
                                     nowTime.innerHTML = '00:00';
                                     button.addEventListener('click',function(e){
                                         var el = e.target
-                                        if(el.className.indexOf('pause')){
+                                        if(el.className.indexOf('pause') > -1){
                                             el.className = 'button play';
                                             audio.play();
                                             timer = setInterval(function(){
@@ -299,7 +294,10 @@
                                                 S = Number(playTime.slice(-2)),
                                                 totalLength = M * 60 + S;
                                                 now.style.width = length / totalLength * progress.offsetWidth + 'px';
-                                                now.style.background = 'greenyellow';
+                                                now.style.background = 'aqua';
+                                                if(length === totalLength){
+                                                    el.className = 'button pause';
+                                                }
                                             },1000)
                                         }else{
                                             el.className = 'button pause';
