@@ -126,21 +126,50 @@
             background: rgb(255, 255, 255, 1);
             box-sizing: border-box;
         }
-        .play,.pause{
+        /* .play,.pause{
             display: inline-block;
             width: 50px;
             height: 30px;
             border-radius: 5px;
             background: #6fa;
-            margin: 10px auto;
-            text-align: center;
-            line-height: 30px;
             cursor: pointer;
+            vertical-align: middle;
+        } */
+        .button{
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 1px solid aqua;
+            border-radius: 50%;
+            vertical-align: middle;
+            position: relative;
+            cursor: pointer;
+        }
+        .button.pause::after{
+            content: '';
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-left-color: aqua;
+            position: absolute;
+            left: 12px;
+            top: 5px;
+        }
+        .button.play::after{
+            content: '';
+            width: 8px;
+            height: 10px;
+            border-left: 3px solid aqua;
+            border-right: 3px solid aqua;
+            position: absolute;
+            left: 8px;
+            top: 10px;
         }
         .nowTime{
             display: inline-block;
-            margin: 0 10px;
-            color: rgb(34, 181, 192);
+            width: 80px;
+            height: 22px;
+            color: aqua;
         }
         .progress{
             display: inline-block;
@@ -148,7 +177,7 @@
             height: 20px;
             border-radius: 20px;
             border: 1px solid #adf;
-            margin-top: 30px 5px;
+            vertical-align: middle;
         }
         .now{
             width: 0;
@@ -158,8 +187,9 @@
         }
         .end{
             display: inline-block;
-            margin-left: 10px;
-            color: rgb(44, 101, 139);
+            width: 80px;
+            height: 22px;
+            color: aqua;
         }
     </style>
 </head>
@@ -177,8 +207,7 @@
     </div>
     <div class="song-list"></div>
     <div class="icons">
-        <div class="play">播放</div>
-        <div class="pause">暂停</div>
+        <div class="button pause"></div>
         <div class="nowTime"></div>
         <div class="progress">
             <div class="now"></div>
@@ -194,8 +223,7 @@
         songList = getClass('song-list'),
         lyrics = getClass('lyrics'),
         comment = getClass('comment'),
-        play = getClass('play'),
-        pause = getClass('pause'),
+        button = getClass('button'),
         nowTime = getClass('nowTime'),
         progress = getClass('progress'),
         now = getClass('now'),
@@ -245,40 +273,40 @@
                                     songList.innerHTML = '';
                                     startRequest();
                                     var timer,currentTime;
-                                    nowTime.innerHTML = '00 : 00';
-                                    play.addEventListener('click',function(){
-                                        audio.play();
-                                        clearInterval(timer);
-                                        timer = setInterval(function(){
-                                            currentTime = Math.floor(audio.currentTime);
-                                            if(currentTime < 10){
-                                                currentTime = '00:0' + currentTime;
-                                            }else if(currentTime < 60){
-                                                currentTime = '00:' + currentTime;
-                                            }else {
-                                                let m = Math.floor(currentTime / 60),
-                                                s = currentTime - m * 60 < 10 ? '0' + (currentTime - m * 60) : currentTime - m * 60;
-                                                currentTime = '0' + m + ':' + s;
-                                            }
-                                            nowTime.innerHTML = currentTime;
-                                            everyTime(currentTime);
-                                            let m = Number(currentTime.slice(1,2)),
-                                            s = Number(currentTime.slice(-2)),
-                                            length = m * 60 + s;
-                                            let M = Number(playTime.slice(1,2)),
-                                            S = Number(playTime.slice(-2)),
-                                            totalLength = M * 60 + S;
-                                            now.style.width = length / totalLength * progress.offsetWidth + 'px';
-                                            now.style.background = 'greenyellow';
-                                        },1000)
+                                    nowTime.innerHTML = '00:00';
+                                    button.addEventListener('click',function(e){
+                                        var el = e.target
+                                        if(el.className.indexOf('pause')){
+                                            el.className = 'button play';
+                                            audio.play();
+                                            timer = setInterval(function(){
+                                                currentTime = Math.floor(audio.currentTime);
+                                                if(currentTime < 10){
+                                                    currentTime = '00:0' + currentTime;
+                                                }else if(currentTime < 60){
+                                                    currentTime = '00:' + currentTime;
+                                                }else {
+                                                    let m = Math.floor(currentTime / 60),
+                                                    s = currentTime - m * 60 < 10 ? '0' + (currentTime - m * 60) : currentTime - m * 60;
+                                                    currentTime = '0' + m + ':' + s;
+                                                }
+                                                nowTime.innerHTML = currentTime;
+                                                everyTime(currentTime);
+                                                let m = Number(currentTime.slice(1,2)),
+                                                s = Number(currentTime.slice(-2)),
+                                                length = m * 60 + s;
+                                                let M = Number(playTime.slice(1,2)),
+                                                S = Number(playTime.slice(-2)),
+                                                totalLength = M * 60 + S;
+                                                now.style.width = length / totalLength * progress.offsetWidth + 'px';
+                                                now.style.background = 'greenyellow';
+                                            },1000)
+                                        }else{
+                                            el.className = 'button pause';
+                                            audio.pause();
+                                            clearInterval(timer);
+                                        }
                                     })
-                                    progress.addEventListener('click',function(){
-                                       
-                                    })
-                                    pause.addEventListener('click',function(){
-                                        audio.pause();
-                                        clearInterval(timer);
-                                    }) 
                                 }
                             }
                             xhr.send(null)
@@ -318,7 +346,7 @@
                     var lyric = document.getElementsByClassName('lyric');
                     lyric[i].style.color = '';
                     lyric[i + 1].style.color = 'red';
-                    lyric[i + 1].parentNode.scrollTop = i * 20;
+                    lyric[i + 1].parentNode.scrollTop = (i + 1) * 20;
                     break;
                 }
             }
