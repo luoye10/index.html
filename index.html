@@ -10,6 +10,10 @@
             margin: 0;
             padding: 0;
         } 
+        body{
+            background: url(./JS/img/壁纸.jpg);
+            background-attachment: fixed;
+        }
         .search{
             text-align: center;
         }
@@ -123,7 +127,7 @@
             border-top: 1px solid aqua;
             text-align: center;
             line-height: 80px;
-            background: rgb(255, 255, 255, 1);
+            background: rgb(255, 255, 255, .5);
         }
         .button{
             display: inline-block;
@@ -133,21 +137,27 @@
             border: 1px solid aqua;
             cursor: pointer;
             vertical-align: middle;
+            position: relative;
         }
-        .pause{    
+        .button.pause::after{ 
+            content: '';   
             width: 0;
             height: 0;
             border: 10px solid transparent;
             border-left-color:  aqua;  
-            margin: 5px 12px;    
+            position: absolute; 
+            left: 12px;
+            top: 5px;  
         }
-        .play{
-            display: none;
+        .button.play::after{
+            content: '';
             width: 8px;
             height: 10px;
             border-left: 3px solid aqua;
             border-right: 3px solid aqua;
-            margin: 10px 8px;
+            position: absolute;
+            left: 8px;
+            top: 10px;
         }
         .nowTime{
             display: inline-block;
@@ -191,10 +201,7 @@
     </div>
     <div class="song-list"></div>
     <div class="icons">
-        <div class="button">
-            <div class="pause"></div>
-            <div class="play"></div>
-        </div>
+        <div class="button pause"></div>
         <div class="nowTime"></div>
         <div class="progress">
             <div class="now"></div>
@@ -211,8 +218,6 @@
         lyrics = getClass('lyrics'),
         comment = getClass('comment'),
         button = getClass('button'),
-        pause = getClass('pause'),
-        play = getClass('play'),
         nowTime = getClass('nowTime'),
         progress = getClass('progress'),
         now = getClass('now'),
@@ -263,10 +268,10 @@
                                     startRequest();
                                     var timer,currentTime;
                                     nowTime.innerHTML = '00 : 00';
-                                    button.addEventListener('click',function(){
-                                        if(play.style.display == 'none'){
-                                            play.style.display = 'block';
-                                            pause.style.display = 'none';
+                                    button.addEventListener('click',function(e){
+                                        var el = e.target
+                                        if(el.className.indexOf('pause') > -1){
+                                            el.className = 'button play';
                                             audio.play();
                                             timer = setInterval(function(){
                                                 currentTime = Math.floor(audio.currentTime);
@@ -289,10 +294,12 @@
                                                 totalLength = M * 60 + S;
                                                 now.style.width = length / totalLength * progress.offsetWidth + 'px';
                                                 now.style.background = 'aqua';
+                                                if(length === totalLength){
+                                                    el.className = 'button pause';
+                                                }
                                             },1000)
                                         }else{
-                                            pause.style.display = 'block';
-                                            play.style.display = 'none';
+                                            el.className = 'button pause';
                                             audio.pause();
                                             clearInterval(timer)
                                         }                                                                                                                   
