@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滚动条</title>
+    <style>
+        .out{
+            width: 300px;
+            height: 200px;
+            border: 1px solid grey;
+            overflow-y: scroll;
+        }
+        .out::-webkit-scrollbar{
+            width: 10px;
+            border-radius: 10px;
+            background: #adf;
+        }
+        .out::-webkit-scrollbar-thumb{
+            height: 10px;
+            border-radius: 10px;
+            background: #3ff;
+        }
+        .text{
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            border-bottom: 1px dotted greenyellow;
+            color: pink;
+        }
+        .box{
+            width: 300px;
+            height: 200px;
+            border: 1px solid grey;
+            overflow-y: hidden;
+            overflow-x: scroll;
+            white-space: nowrap;
+            margin-top: 20px;
+        }
+        .box::-webkit-scrollbar{
+            height: 20px;
+            background: blue;
+        }
+        .box::-webkit-scrollbar-track{
+            height: 10px;
+            border-radius: 10px;
+            background: rgba(214, 75, 11, 0.8);
+        }
+        .box::-webkit-scrollbar-thumb{
+            width: 10px;
+            border-radius: 10px;
+            background: #faa;
+            margin: 0 10px;
+        }
+        .box::-webkit-scrollbar-button{
+            width: 20px;
+            background: aqua;
+        }
+        .test{
+            display: inline-block;
+            width: 100px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            border-right: 1px dashed pink;
+            border-bottom: 1px dashed pink;
+            color: #2ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="out">
+        <div class="text">春节</div>
+        <div class="text">元宵节</div>
+        <div class="text">清明节</div>
+        <div class="text">元宵节</div>
+        <div class="text">七夕</div>
+        <div class="text">中秋节</div>
+        <div class="text">国庆节</div>
+        <div class="text">重阳节</div>
+        <div class="text">情人节</div>
+        <div class="text">教师节</div>
+        <div class="text">圣诞节</div>
+        <div class="text">元旦节</div>
+        <div class="text">青年节</div>
+        <div class="text">建党节</div>
+        <div class="text">建军节</div>
+        <div class="text">儿童节</div>
+    </div>
+    <div class="box">
+        <div class="test">春节</div>
+        <div class="test">元宵节</div>
+        <div class="test">清明节</div>
+        <div class="test">元宵节</div>
+        <div class="test">七夕</div>
+        <div class="test">中秋节</div>
+        <div class="test">国庆节</div>
+        <div class="test">重阳节</div>
+        <div class="test">情人节</div>
+        <div class="test">教师节</div>
+        <div class="test">圣诞节</div>
+        <div class="test">元旦节</div>
+        <div class="test">青年节</div>
+        <div class="test">建党节</div>
+        <div class="test">建军节</div>
+        <div class="test">儿童节</div>
+    </div>
+</body>
+</html>
