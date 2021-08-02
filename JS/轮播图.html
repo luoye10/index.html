@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <style>
+        div,ul,li,img,a{
+            margin: 0;
+            padding: 0;
+        }
+        .out{
+            width: 420px;
+            height: 320px;
+            margin: 50px auto;
+            background: aqua;
+            position: relative;
+            overflow: hidden;
+        }
+        .list{
+            list-style: none;
+            position: absolute;
+            left: 0;
+        }
+        .item{
+            float: left;
+            margin: 10px;
+        }
+        img{
+            width: 400px;
+            height: 300px;
+        }
+        .nav{
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 20px;
+        }
+        a{
+            width: 10px;
+            height: 10px;
+            background: red;
+            float: left;
+            margin: 0 5px;
+            opacity: 0.5;
+        }
+        a:hover{
+            background: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="out">
+        <ul class="list">
+            <li class="item">
+                <img src="./img/1.jpg" alt="">
+            </li>
+            <li class="item">
+                <img src="./img/2.jpg" alt="">
+            </li>
+            <li class="item">
+                <img src="./img/3.jpg" alt="">
+            </li>
+            <li class="item">
+                <img src="./img/4.jpg" alt="">
+            </li>
+            <li class="item">
+                <img src="./img/5.jpg" alt="">
+            </li>
+            <li class="item">
+                <img src="./img/1.jpg" alt="">
+            </li>
+        </ul>
+        <div class="nav">
+            <a href="javascript:;"></a>
+            <a href="javascript:;"></a>
+            <a href="javascript:;"></a>
+            <a href="javascript:;"></a>
+            <a href="javascript:;"></a>
+        </div>
+    </div>
+    <script src="./JS/tool.js"></script>
+    <script>
+        var list = document.getElementsByClassName('list')[0],
+        imgArr = document.getElementsByTagName('img'),
+        allA = document.getElementsByTagName('a');
+        var timer, index = 0;
+        list.style.width = 420 * imgArr.length + 'px';
+        allA[index].style.background = 'black';
+        for(var i = 0; i < allA.length; i++){
+            allA[i].num = i
+            addEvent(allA[i], 'click', function(){
+                clearInterval(timer)
+                index = this.num
+                setA()
+                move(list, 'left', -420 * index, 20, function(){
+                    autoChange()
+                })
+            })
+        }
+        autoChange()
+        function setA(){
+            if(index >= imgArr.length - 1){
+                index = 0
+                list.style.left = 0
+            }
+            for(var i = 0; i < allA.length; i++){
+                allA[i].style.background = ''
+            }
+            allA[index].style.background = 'black'
+        }
+        function autoChange(){
+            timer = setInterval(function(){
+                index++
+                index %= imgArr.length
+                move(list, 'left', -420 * index, 20, function(){
+                    setA()
+                })
+            },2000)
+        }
+    </script>
+</body>
+</html>
