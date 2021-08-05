@@ -36,11 +36,7 @@
             return document.createElement(tag)
         }
         function color(){
-            var c = '#', str = '0123456789abcdef'
-            for(var i = 0; i < 6; i++){
-                c += str[speed(0,15)]
-            }
-            return c
+            return '#' + Math.random().toString(16).slice(2,8)
         }
         function speed(min,max){
             return Math.floor(Math.random(max - min) * max + min)
@@ -51,9 +47,11 @@
         function start(circle){
             if(circle.left + 100 >= w - 15){
                 circle.flag = false
+                circle.el.style.backgroundImage = 'radial-gradient(#fff 50%,' + color() + ')';
             }
             if(circle.left <= 0){
                 circle.flag = true
+                circle.el.style.backgroundImage = 'radial-gradient(#fff 50%,' + color() + ')';
             }
             if(circle.flag){
                 circle.left += circle.x
@@ -62,9 +60,11 @@
             }
             if(circle.top + 100 >= h - 10){
                 circle.flag2 = false
+                circle.el.style.backgroundImage = 'radial-gradient(#fff 50%,' + color() + ')';
             }
             if(circle.top <= 0){
                 circle.flag2 = true
+                circle.el.style.backgroundImage = 'radial-gradient(#fff 50%,' + color() + ')';
             }
             if(circle.flag2){
                 circle.top += circle.y
