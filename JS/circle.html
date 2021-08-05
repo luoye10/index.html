@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        var el = document.createElement('div');
+        var speed = 0, speed2 = 0, flag = true, flag2 = true, w = window.innerWidth, h = window.innerHeight
+        function create(){
+            el.style.background = color();
+            el.style.backgroundImage = ' radial-gradient(#fff 50% , ' + color() + ')';
+            document.body.appendChild(el);
+        };
+        function color(){
+            return '#' + Math.random().toString(16).slice(2,8)
+        };
+        create();
+        setInterval(function(){            
+            if(flag){
+                speed += 15;
+            }else{
+                speed -= 15;
+            }                       
+            if(speed + 100 >= w - 15){
+                flag = false;
+                create();          
+            }
+            if(speed <= 0){
+                flag = true;
+                create();
+            }
+            if(flag2){
+                speed2 += 10;
+            }else{
+                speed2 -= 10;
+            }
+            if(speed2 + 100 >= h - 10){
+                flag2 = false;
+                create();
+            }
+            if(speed2 <= 0){
+                flag2 = true;
+                create();
+            }
+            el.style.left = speed + 'px';
+            el.style.top = speed2 + 'px';
+        },100);
+    </script>
+</body>
+</html>
