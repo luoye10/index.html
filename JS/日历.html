@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div,ul,li{
+            margin: 0;
+            padding: 0;
+        }
+        .calendar{
+            width: 400px;
+            height: 600px;
+            border: 1px solid aqua;
+            background: whitesmoke;
+            margin: 10px auto;
+        }
+        .head{
+            height: 100px;
+            border-bottom: 1px dashed black;
+        }
+        .time{
+            font-size: 40px;
+            color: aqua;
+            margin: 10px;
+        }
+        .date{
+            color: pink;
+            margin: 10px;
+        }
+        .top{
+            position: relative;
+            height: 30px;
+        }
+        .month{
+            color: rgba(201, 20, 207, 0.699);
+            margin: 10px;
+        }
+        .right{
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        .prev,.next{
+            width: 50px;
+            height: 20px;
+            display: inline-block;
+            color: rgba(25, 196, 53, 0.685);
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .date-list{
+            margin: 0 10px;
+        }
+        .list{
+            margin: 0 10px;
+            position: relative;
+        }
+        .item{
+            list-style: none;
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+        }
+        .every{
+            list-style: none;
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            margin: 0 2px;
+            cursor: pointer;
+        }
+        .select{
+            color: white;
+            background: rgba(17, 87, 216, 0.719);
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar">
+        <div class="head">
+            <div class="time"></div>
+            <div class="date"></div>
+        </div>
+        <div class="content">
+            <div class="top">
+                <div class="month"></div>
+                <div class="right">
+                    <div class="prev">上一月</div>
+                    <div class="next">下一月</div>
+                </div>
+            </div>
+            <div class="day">
+                <ul class="date-list">
+                    <li class="item">一</li>
+                    <li class="item">二</li>
+                    <li class="item">三</li>
+                    <li class="item">四</li>
+                    <li class="item">五</li>
+                    <li class="item">六</li>
+                    <li class="item">日</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="./JS/tool.js"></script>
+    <script>
+        var time = getClass('time'),
+        date = getClass('date'),
+        month = getClass('month'),
+        prev = getClass('prev'),
+        next = getClass('next'),
+        day = getClass('day'),
+        list = getClass('list'),
+        items = document.querySelectorAll('.item')
+        var y = new Date().getFullYear(),
+        M = new Date().getMonth() + 1,
+        d = new Date().getDate()
+        setInterval(function(){
+            var h = new Date().getHours(),
+            m = new Date().getMinutes(),
+            s = new Date().getSeconds()
+            time.innerHTML = judge(h) + ':' + judge(m) + ':' + judge(s)
+        },1000)
+        date.innerHTML = y + '年' + M + '月' + d + '日'
+        month.innerHTML = y + '年' + M + '月'
+        addEvent(prev, 'click', function(){
+            M--
+            if(M == 0){
+                M = 12
+                y--
+            }
+            create()
+        })
+        addEvent(next, 'click', function(){
+            M++
+            if(M > 12){
+                y++
+                M = 0
+            }
+            create()
+        })
+        function create(){
+            var frag = document.createDocumentFragment()
+            var ul = document.createElement('ul')
+            ul.className = 'list'
+            for(var i = 1; i <= allDate(y,M); i++){
+                var li = document.createElement('li')
+                li.className = 'every'
+                li.innerText = i
+                if(i == d){
+                    li.className = 'every select'
+                }
+                addEvent(li, 'click', function(event){
+                    event = event || window.event
+                    event.target.className = 'every select'
+                })
+                frag.appendChild(li)
+            }
+            ul.appendChild(frag)
+            day.innerHTML = ''
+            day.appendChild(ul)
+            month.innerHTML = y + '年' + M + '月'
+            firstDay(y,M)
+        }
+        create()
+        function allDate(year, month){
+            return new Date(year, month, 0).getDate()
+        }
+        function firstDay(year,month){
+            var first =  new Date(year,month - 1,1).getDay()
+            first = first === 0 ? 7 : first
+            var el = document.getElementsByClassName('list')[0]
+            for(var i = 0; i < first - 1; i++){
+                var li = document.createElement('li')
+                li.className = 'every'
+                el.insertBefore(li,el.firstChild)
+            }
+        }
+        function judge(num){
+            return num < 10 ? '0' + num : num
+        }
+    </script>
+</body>
+</html>
