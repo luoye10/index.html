@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #time{
+            width: 300px;
+            height: 300px;
+            padding: 50px 90px;
+            background: aqua;
+            border: 1px solid pink;
+            color: white;
+            box-sizing: border-box;
+            font-size: 20px;
+            margin: 30px auto;
+        }
+        #time button{
+            width: 100px;
+            height: 30px;
+            margin-top: 30px;
+            font-size: 14px;
+            text-align: center;
+            background: pink;
+            color: white;
+            border: 1px solid pink;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="time">
+        <span id="hours">00</span>
+        <span>:</span>
+        <span id="minute">00</span>
+        <span>:</span>
+        <span id="second">00</span>
+        <br>
+        <button id="btn">开始</button>
+        <button id="reset">复位</button>
+    </div>
+    <script>
+        function stopwatch(){
+            var i = 0
+            var timer
+            var isRunning = false
+            function start(){
+                clearInterval(timer)
+                timer = setInterval(function(){
+                    i++
+                    idName('second').innerHTML = doubleNum(i % 60)
+                    idName('minute').innerHTML = doubleNum(parseInt(i / 60))
+                    idName('hours').innerHTML = doubleNum(parseInt(i / 3600))
+                },1000)
+            }
+            function pause(){
+                clearInterval(timer)
+            }
+            idName('btn').onclick = function(){
+                if(!isRunning){
+                    idName('btn').innerHTML = '暂停'
+                    isRunning = true
+                    start()
+                }else{
+                    idName('btn').innerHTML = '开始'
+                    isRunning = false
+                    pause()
+                }
+            }
+            idName('reset').onclick = function(){
+                clearInterval(timer)
+                i = 0
+                isRunning = false
+                idName('btn').innerHTML = '开始'
+                idName('hours').innerHTML = '00'
+                idName('minute').innerHTML = '00'
+                idName('second').innerHTML = '00'
+            }
+        }
+        stopwatch()
+        function idName(id){
+            return document.getElementById(id)
+        }
+        function doubleNum(n){
+            return n < 10 ? '0' + n : n
+        }
+    </script>
+</body>
+</html>
