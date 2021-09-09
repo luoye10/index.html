@@ -107,6 +107,7 @@
                     <li class="item">日</li>
                 </ul>
             </div>
+            <div class="test"></div>
         </div>
     </div>
     <script src="./JS/tool.js"></script>
@@ -117,7 +118,8 @@
         prev = getClass('prev'),
         next = getClass('next'),
         day = getClass('day'),
-        list = getClass('list'),
+        lists = getClass('date-list'),
+        test = getClass('test'),
         items = document.querySelectorAll('.item')
         var y = new Date().getFullYear(),
         M = new Date().getMonth() + 1,
@@ -154,7 +156,7 @@
                 var li = document.createElement('li')
                 li.className = 'every'
                 li.innerText = i
-                if(i == d){
+                if(i === d){
                     li.className = 'every select'
                 }
                 addEvent(li, 'click', function(event){
@@ -164,8 +166,8 @@
                 frag.appendChild(li)
             }
             ul.appendChild(frag)
-            day.innerHTML = ''
-            day.appendChild(ul)
+            test.innerHTML = ''
+            test.appendChild(ul)
             month.innerHTML = y + '年' + M + '月'
             firstDay(y,M)
         }
