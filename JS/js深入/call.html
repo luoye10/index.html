@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        Function.prototype.call2 = function(context){
+            context = context || window;
+            context.fn = this;
+            var args = [];
+            for(var i = 1,len = arguments.length;i < len;i++){
+                args.push('arguments[' + i + ']');
+            }
+            var result = eval('context.fn(' + args + ')');
+            delete context.fn;
+            return result;
+        };
+        var v = 100;
+        var obj = {
+            v: 200
+        }
+        function bar(name,age){
+            console.log(this.v);
+            return{
+                v: this.v,
+                name: name,
+                age: age
+            };
+        };
+        bar.call2(null);  
+        console.log(bar.call2(obj,'lily',22));
+    </script>
+</body>
+</html>
