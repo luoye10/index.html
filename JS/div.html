@@ -1,86 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        div{
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            position: absolute;
-        }
-    </style>
-</head>
-<body>
-    <script>
-        var list = [], w = window.innerWidth, h = window.innerHeight, c
-        function circle(el){
-            c = color()
-            el.style.backgroundImage = 'radial-gradient(#fff 50%,' + c + ')';
-            document.body.appendChild(el)
-            return {
-                left: 0,
-                top: 0,
-                x: speed(5,15),
-                y: speed(5,10),
-                flag: true,
-                flag2: true,
-                color: c,
-                el: el
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            div {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                position: absolute;
             }
-        }
-        function create(tag){
-            return document.createElement(tag)
-        }
-        function color(){
-            return '#' + Math.random().toString(16).slice(2,8)
-        }
-        function speed(min,max){
-            return Math.floor(Math.random(max - min) * max + min)
-        }
-        for(var i = 0; i < 10; i++){
-            list.push(circle(create('div')))
-        }
-        function start(circle){
-            if(circle.left + 100 >= w - 15){
-                circle.flag = false
-                circle.el.style.backgroundImage = 'radial-gradient(#fff 50%,' + color() + ')';
+        </style>
+    </head>
+    <body>
+        <script>
+            let list = [],
+                w = window.innerWidth,
+                h = window.innerHeight,
+                c;
+            function circle(el) {
+                c = color();
+                el.style.backgroundImage = 'radial-gradient(#fff 50%,' + c + ')';
+                document.body.appendChild(el);
+                return {
+                    left: 0,
+                    top: 0,
+                    x: speed(5, 15),
+                    y: speed(5, 10),
+                    flag: true,
+                    flag2: true,
+                    color: c,
+                    el: el
+                };
             }
-            if(circle.left <= 0){
-                circle.flag = true
-                circle.el.style.backgroundImage = 'radial-gradient(#fff 50%,' + color() + ')';
+            function create(tag) {
+                return document.createElement(tag);
             }
-            if(circle.flag){
-                circle.left += circle.x
-            }else{
-                circle.left -= circle.x
+            function color() {
+                return '#' + Math.random().toString(16).slice(2, 8);
             }
-            if(circle.top + 100 >= h - 10){
-                circle.flag2 = false
-                circle.el.style.backgroundImage = 'radial-gradient(#fff 50%,' + color() + ')';
+            function speed(min, max) {
+                return Math.floor(Math.random(max - min) * max + min);
             }
-            if(circle.top <= 0){
-                circle.flag2 = true
-                circle.el.style.backgroundImage = 'radial-gradient(#fff 50%,' + color() + ')';
+            for (let i = 0; i < 10; i++) {
+                list.push(circle(create('div')));
             }
-            if(circle.flag2){
-                circle.top += circle.y
-            }else{
-                circle.top -= circle.y
+            function start(circle) {
+                if (circle.left + 100 >= w - 15) {
+                    circle.flag = false;
+                    circle.el.style.backgroundImage = 'radial-gradient(#fff 50%,' + color() + ')';
+                }
+                if (circle.left <= 0) {
+                    circle.flag = true;
+                    circle.el.style.backgroundImage = 'radial-gradient(#fff 50%,' + color() + ')';
+                }
+                if (circle.flag) {
+                    circle.left += circle.x;
+                } else {
+                    circle.left -= circle.x;
+                }
+                if (circle.top + 100 >= h - 12) {
+                    circle.flag2 = false;
+                    circle.el.style.backgroundImage = 'radial-gradient(#fff 50%,' + color() + ')';
+                }
+                if (circle.top <= 0) {
+                    circle.flag2 = true;
+                    circle.el.style.backgroundImage = 'radial-gradient(#fff 50%,' + color() + ')';
+                }
+                if (circle.flag2) {
+                    circle.top += circle.y;
+                } else {
+                    circle.top -= circle.y;
+                }
+                circle.el.style.left = circle.left + 'px';
+                circle.el.style.top = circle.top + 'px';
             }
-            circle.el.style.left = circle.left + 'px'
-            circle.el.style.top = circle.top + 'px'
-        }
-        function render(){
-            list.forEach(function(c){
-                start(c)
-            })
-        }
-        render()
-        setInterval(render,100)
-    </script>
-</body>
+            function render() {
+                list.forEach(function (c) {
+                    start(c);
+                });
+            }
+            render();
+            setInterval(render, 100);
+        </script>
+    </body>
 </html>
